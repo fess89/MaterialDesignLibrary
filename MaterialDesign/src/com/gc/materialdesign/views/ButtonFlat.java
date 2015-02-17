@@ -18,8 +18,13 @@ public class ButtonFlat extends Button {
 
 	public ButtonFlat(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
 	}
+
+    public void setTextColor(int color) {
+        if (null != textButton) {
+            textButton.setTextColor(color);
+        }
+    }
 	
 	protected void setDefaultProperties(){
 		minHeight = 36;
@@ -44,16 +49,18 @@ public class ButtonFlat extends Button {
 		if(text != null){
 			textButton = new TextView(getContext());
 			textButton.setText(text.toUpperCase());
-			textButton.setTextColor(backgroundColor);
+			textButton.setTextColor(this.backgroundColor);
 			textButton.setTypeface(null, Typeface.BOLD);
 			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 			textButton.setLayoutParams(params);
 			addView(textButton);
 		}
-		int bacgroundColor = attrs.getAttributeResourceValue(ANDROIDXML,"background",-1);
-		if(bacgroundColor != -1){
-			setBackgroundColor(getResources().getColor(bacgroundColor));
+        
+		int backgroundColor = attrs.getAttributeResourceValue(ANDROIDXML,"background",-1);
+        
+		if(backgroundColor != -1){
+			setBackgroundColor(getResources().getColor(backgroundColor));
 		}else{
 			// Color by hexadecimal
 			// Color by hexadecimal
@@ -62,8 +69,7 @@ public class ButtonFlat extends Button {
 				setBackgroundColor(background);
 		}
 	}
-	
-	
+		
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
@@ -116,5 +122,4 @@ public class ButtonFlat extends Button {
 	public String getText(){
         	return textButton.getText().toString();
  	}
-
 }
