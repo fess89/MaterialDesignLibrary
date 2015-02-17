@@ -1,18 +1,16 @@
 package com.gc.materialdesigndemo.ui;
 
-import com.gc.materialdesign.views.ButtonFloatSmall;
-import com.gc.materialdesign.views.LayoutRipple;
-import com.gc.materialdesign.widgets.ColorSelector;
-import com.gc.materialdesign.widgets.ColorSelector.OnColorSelectedListener;
+import com.fess89.materialdesign.views.ButtonFloatSmall;
+import com.fess89.materialdesign.views.LayoutRipple;
+import com.fess89.materialdesign.widgets.ColorSelector;
+import com.fess89.materialdesign.widgets.ColorSelector.OnColorSelectedListener;
 import com.gc.materialdesigndemo.R;
 import com.nineoldandroids.view.ViewHelper;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;

@@ -33,7 +33,7 @@
             android:layout_width="fill_parent"
             android:layout_height="100dp" >
 
-            <com.gc.materialdesign.views.ProgressBarCircularIndeterminateRounded
+            <com.fess89.materialdesign.views.ProgressBarCircularIndeterminateRounded
                 android:id="@+id/progressBarCircularIndetermininate"
                 android:layout_width="100dp"
 				android:padding="10dp"

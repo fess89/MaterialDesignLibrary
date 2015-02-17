@@ -1,8 +1,8 @@
-package com.gc.materialdesign.widgets;
+package com.fess89.materialdesign.widgets;
 
 import com.gc.materialdesign.R;
-import com.gc.materialdesign.views.Slider;
-import com.gc.materialdesign.views.Slider.OnValueChangedListener;
+import com.fess89.materialdesign.views.Slider;
+import com.fess89.materialdesign.views.Slider.OnValueChangedListener;
 
 import android.content.Context;
 import android.content.DialogInterface;

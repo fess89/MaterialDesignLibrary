@@ -1,15 +1,13 @@
-package com.gc.materialdesign.views;
+package com.fess89.materialdesign.views;
 
 import com.gc.materialdesign.R;
-import com.gc.materialdesign.utils.Utils;
+import com.fess89.materialdesign.utils.Utils;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;

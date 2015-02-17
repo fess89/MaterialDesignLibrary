@@ -1,7 +1,7 @@
-package com.gc.materialdesign.views;
+package com.fess89.materialdesign.views;
 
 import com.gc.materialdesign.R;
-import com.gc.materialdesign.utils.Utils;
+import com.fess89.materialdesign.utils.Utils;
 
 import android.content.Context;
 import android.graphics.Canvas;

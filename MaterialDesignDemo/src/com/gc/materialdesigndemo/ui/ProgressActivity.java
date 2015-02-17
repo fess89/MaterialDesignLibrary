@@ -4,12 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Window;
 
-import com.gc.materialdesign.views.ProgressBarDeterminate;
-import com.gc.materialdesign.views.ProgressBarIndeterminateDeterminate;
 import com.gc.materialdesigndemo.R;
 
 public class ProgressActivity extends Activity {

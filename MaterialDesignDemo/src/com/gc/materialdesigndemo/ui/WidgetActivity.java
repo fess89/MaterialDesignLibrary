@@ -1,9 +1,9 @@
 package com.gc.materialdesigndemo.ui;
 
-import com.gc.materialdesign.views.ButtonFlat;
-import com.gc.materialdesign.widgets.ColorSelector;
-import com.gc.materialdesign.widgets.Dialog;
-import com.gc.materialdesign.widgets.SnackBar;
+import com.fess89.materialdesign.views.ButtonFlat;
+import com.fess89.materialdesign.widgets.ColorSelector;
+import com.fess89.materialdesign.widgets.Dialog;
+import com.fess89.materialdesign.widgets.SnackBar;
 import com.gc.materialdesigndemo.R;
 
 import android.annotation.SuppressLint;

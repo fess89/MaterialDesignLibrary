@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#FFF"
     >
-    <com.gc.materialdesign.views.ScrollView
+    <com.fess89.materialdesign.views.ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
@@ -38,7 +38,7 @@
             android:layout_width="fill_parent"
             android:layout_height="72dp" >
 
-            <com.gc.materialdesign.views.ButtonFlat
+            <com.fess89.materialdesign.views.ButtonFlat
                 android:id="@+id/buttonflat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:layout_width="fill_parent"
             android:layout_height="72dp" >
 
-            <com.gc.materialdesign.views.ButtonRectangle
+            <com.fess89.materialdesign.views.ButtonRectangle
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
             android:layout_width="fill_parent"
             android:layout_height="72dp" >
 
-            <com.gc.materialdesign.views.ButtonFloatSmall
+            <com.fess89.materialdesign.views.ButtonFloatSmall
                 android:id="@+id/buttonFloatSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
             android:layout_width="fill_parent"
             android:layout_height="72dp" >
 
-            <com.gc.materialdesign.views.ButtonIcon
+            <com.fess89.materialdesign.views.ButtonIcon
                 android:id="@+id/buttonIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -164,8 +164,8 @@
                 android:background="#1E88E5" />
         </RelativeLayout>
     </LinearLayout>
-    </com.gc.materialdesign.views.ScrollView>
-    <com.gc.materialdesign.views.ButtonFloat
+    </com.fess89.materialdesign.views.ScrollView>
+    <com.fess89.materialdesign.views.ButtonFloat
                 android:id="@+id/buttonFloat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -33,7 +33,7 @@
             android:layout_width="fill_parent"
             android:layout_height="72dp" >
 
-            <com.gc.materialdesign.views.ButtonFlat
+            <com.fess89.materialdesign.views.ButtonFlat
                 android:id="@+id/buttonSnackBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_width="fill_parent"
             android:layout_height="72dp" >
 
-            <com.gc.materialdesign.views.ButtonFlat
+            <com.fess89.materialdesign.views.ButtonFlat
                 android:id="@+id/buttonDialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
             android:layout_width="fill_parent"
             android:layout_height="72dp" >
 
-            <com.gc.materialdesign.views.ButtonFlat
+            <com.fess89.materialdesign.views.ButtonFlat
                 android:id="@+id/buttonColorSelector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

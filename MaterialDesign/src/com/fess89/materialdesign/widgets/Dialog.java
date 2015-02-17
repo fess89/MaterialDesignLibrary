@@ -1,4 +1,4 @@
-package com.gc.materialdesign.widgets;
+package com.fess89.materialdesign.widgets;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gc.materialdesign.R;
-import com.gc.materialdesign.views.ButtonFlat;
+import com.fess89.materialdesign.views.ButtonFlat;
 
 public class Dialog extends android.app.Dialog{
 	

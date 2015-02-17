@@ -1,4 +1,4 @@
-package com.gc.materialdesign.utils;
+package com.fess89.materialdesign.utils;
 
 import android.content.res.Resources;
 import android.util.TypedValue;
