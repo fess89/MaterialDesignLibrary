@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '20.0.0'
+    buildToolsVersion '21.1.2'
 
     sourceSets {
         main {
@@ -53,8 +53,8 @@ bintray {
 }
 
 dependencies {
-    compile 'com.nineoldandroids:library:2.4.+'
-    compile 'com.android.support:support-v4:21.+'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.android.support:support-v4:21.0.3'
 }
 
 install {
@@ -76,6 +76,11 @@ install {
                         name 'Iván Navas'
                         email 'i.navas.mdc@gmail.com'
                     }
+                    developer {
+                        id 'fess89'
+                        name 'Oleksii Chyrkov'
+                        email 'fess89@gmail.com'
+                    }
                 }
                 scm {
                     connection gitUrl
@@ -92,18 +97,7 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
 artifacts {
-    archives javadocJar
     archives sourcesJar
 }
 
