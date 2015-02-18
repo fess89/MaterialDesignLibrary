@@ -32,6 +32,12 @@
         <attr name="rippleBorderRadius" format="float" />
         <!-- if true, delays calls to OnClickListeners until ripple effect ends -->
         <attr name="clickAfterRipple" format="boolean" />
+
+		<attr name="minArcAngle" format="integer|reference"/>
+		<attr name="maxArcAngle" format="integer|reference"/>
+		<attr name="thickness" format="dimension|reference"/>
+		<attr name="outerThickness" format="dimension|reference"/>
+		<attr name="arcColor" format="color|reference"/>
     </declare-styleable>
 
 </resources>

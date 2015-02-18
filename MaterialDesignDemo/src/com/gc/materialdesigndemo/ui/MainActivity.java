@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 
-
 public class MainActivity extends Activity implements OnColorSelectedListener{
 	
 	int backgroundColor = Color.parseColor("#1E88E5");

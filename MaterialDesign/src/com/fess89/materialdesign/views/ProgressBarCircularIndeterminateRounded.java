@@ -1,6 +1,7 @@
 package com.fess89.materialdesign.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,40 +12,67 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.Transformation;
 
-import com.fess89.materialdesign.utils.Utils;
+import com.gc.materialdesign.R;
 
 public class ProgressBarCircularIndeterminateRounded extends CustomView {
 
-    private static final String ANDROIDXML = "http://schemas.android.com/apk/res/android";
+    private static final String TAG = ProgressBarCircularIndeterminateRounded.class.getSimpleName();
 
-    private static final int DEFAULT_COLOR = Color.parseColor("#1E88E5");
+    private static final int DEFAULT_BACKGROUND_CIRCLE_COLOR = Color.parseColor("#1E88E5");
 
-    private int backgroundColor = DEFAULT_COLOR;
+    private int mBackgroundCircleColor = DEFAULT_BACKGROUND_CIRCLE_COLOR;
 
-    private Paint arcPaint;
+    private static final int DEFAULT_FOREGROUND_CIRCLE_COLOR = Color.parseColor("#FF0000");
+
+    private int mForegroundCircleColor = DEFAULT_FOREGROUND_CIRCLE_COLOR;
+
+    private static final int DEFAULT_OUTER_CIRCLE_COLOR = Color.parseColor("#00FF00");
+
+    private int mOuterCircleColor = DEFAULT_OUTER_CIRCLE_COLOR;
+
+    private final Paint mBackgroundCirclePaint = new Paint();
+
+    private final Paint mForegroundCirclePaint = new Paint();
+
+    private final Paint mOuterCirclePaint = new Paint();
 
     private final Path arcPath = new Path();
 
-    private final int thicknessDp = 10;
+    private int mainCircleThickness;
 
-    private final int thicknessPx;
+    private int outerCircleThickness;
 
-    private final int increment = 2;
+    private int maxBackgroundCircleWidth = 270;
 
-    private final int maxArcAngle = 180;
+    private int minBackgroundCircleWidth = 0;
 
-    private final int minArcAngle = 15;
+    private int maxForegroundCircleWidth = 180;
+
+    private int minForegroundCircleWidth = 0;
+
+    private boolean backgroundCircleFinished = false;
 
     private final Paint transparentPaint;
 
-    int arcWidth = 1;
+    private int mBackgroundCircleWidth = 0;
 
-    int startAngle = 0;
+    private int mForegroundCircleWidth = 0;
 
-    float rotateAngle = 0;
+    private int distanceBetweenCircles = 5;
 
-    int limit = 0;
+    private final int startOffset = 90;
+
+    private int width;
+
+    private int height;
 
     public ProgressBarCircularIndeterminateRounded(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,118 +82,152 @@ public class ProgressBarCircularIndeterminateRounded extends CustomView {
         transparentPaint.setAntiAlias(true);
         transparentPaint.setColor(getResources().getColor(android.R.color.transparent));
         transparentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-
-        thicknessPx = Utils.dpToPx(thicknessDp, context.getResources());
     }
 
-    // Set atributtes of XML to View
-    protected void setAttributes(AttributeSet attrs) {
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        width = w;
+        height = h;
 
-        //Set background Color
-        // Color by resource
-        int backgroundColor = attrs.getAttributeResourceValue(ANDROIDXML, "background", -1);
-        if (backgroundColor != -1) {
-            setBackgroundColor(getResources().getColor(backgroundColor));
-        } else {
-            // Color by hexadecimal
-            int background = attrs.getAttributeIntValue(ANDROIDXML, "background", -1);
-            if (background != -1) {
-                setBackgroundColor(background);
+        BackgroundCircleAnimation backgroundCircleAnimation = new BackgroundCircleAnimation(1500);
+        backgroundCircleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
             }
-            else {
-                setBackgroundColor(DEFAULT_COLOR);
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                backgroundCircleFinished = true;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        ForegroundCircleAnimation foregroundCircleAnimation = new ForegroundCircleAnimation(1500);
+        foregroundCircleAnimation.setStartOffset(backgroundCircleAnimation.getDuration());
+
+        //MyRotateAnimation rotateAnimation = new MyRotateAnimation(0, 360, 1500);
+
+        AnimationSet animationSet = new AnimationSet(false);
+        animationSet.addAnimation(backgroundCircleAnimation);
+        animationSet.addAnimation(foregroundCircleAnimation);
+        //animationSet.addAnimation(rotateAnimation);
+
+        this.setAnimation(animationSet);
+        startAnimation(animationSet);
+    }
+
+    // Set attributes of XML to View
+    protected void setAttributes(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.CustomAttributes);
+            try {
+                maxBackgroundCircleWidth = typedArray.getInteger(R.styleable.CustomAttributes_maxArcAngle, 270);
+                maxBackgroundCircleWidth %= 360;
+
+                // TODO
+                //maxForegroundCircleWidth = typedArray.getInteger(R.styleable.CustomAttributes_minArcAngle, 15);
+                //maxForegroundCircleWidth %= 360;
+
+                mainCircleThickness = typedArray.getDimensionPixelSize(R.styleable.CustomAttributes_thickness, 7);
+                outerCircleThickness = typedArray.getDimensionPixelSize(R.styleable.CustomAttributes_outerThickness, 5);
+
+                mBackgroundCircleColor = typedArray.getColor(R.styleable.CustomAttributes_arcColor, DEFAULT_BACKGROUND_CIRCLE_COLOR);
+            } catch (Exception e) {
+                Log.e(TAG, "Cannot load attributes");
+            } finally {
+                typedArray.recycle();
             }
         }
 
-        arcPaint = new Paint();
-        arcPaint.setAntiAlias(true);
-        arcPaint.setColor(this.backgroundColor);
+        mBackgroundCirclePaint.setStyle(Paint.Style.FILL);
+        mBackgroundCirclePaint.setAntiAlias(true);
+        mBackgroundCirclePaint.setColor(this.mBackgroundCircleColor);
+
+        mForegroundCirclePaint.setStyle(Paint.Style.FILL);
+        mForegroundCirclePaint.setAntiAlias(true);
+        mForegroundCirclePaint.setColor(this.mForegroundCircleColor);
+
+        mOuterCirclePaint.setStyle(Paint.Style.STROKE);
+        mOuterCirclePaint.setAntiAlias(true);
+        mOuterCirclePaint.setColor(this.mOuterCircleColor);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawSecondAnimation(canvas);
-        invalidate();
-    }
-
-    /**
-     * Draw second animation of view
-     *
-     * @param canvas - the canvas to draw on.
-     */
-    private void drawSecondAnimation(Canvas canvas) {
-        rotateCanvas(canvas);
 
         Bitmap bitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas temp = drawOuterCircle(bitmap);
-        drawTransparentCircle(temp);
+        Canvas temp = new Canvas(bitmap);
+
+        if (backgroundCircleFinished) {
+            mBackgroundCircleWidth = maxBackgroundCircleWidth;
+        }
+
+        drawOuterCircle(temp);
+
+        drawBackgroundCircle(temp);
+
+        drawForegroundCircle(temp);
+
+        drawInnerCircle(temp);
 
         canvas.drawBitmap(bitmap, 0, 0, new Paint());
     }
 
-    private Canvas drawOuterCircle(Bitmap bitmap) {
-        Canvas temp = new Canvas(bitmap);
-        drawArc(temp, startAngle, arcWidth, arcPaint);
-        return temp;
+    private void drawForegroundCircle(Canvas canvas) {
+        drawMainArc(canvas, mForegroundCircleWidth, mForegroundCirclePaint);
     }
 
-    private void rotateCanvas(Canvas canvas) {
-        if (startAngle == limit) {
-            arcWidth += increment;
-        }
-        if ( (arcWidth >= maxArcAngle) || (startAngle > limit) ) {
-            startAngle += increment;
-            arcWidth -= increment;
-        }
-        if (startAngle > limit + maxArcAngle - minArcAngle) {
-            limit = startAngle;
-            startAngle = limit;
-            arcWidth = minArcAngle;
-        }
-        rotateAngle += increment;
-        canvas.rotate(rotateAngle, getWidth() / 2, getHeight() / 2);
+    private Canvas drawBackgroundCircle(Canvas canvas) {
+        drawMainArc(canvas, mBackgroundCircleWidth, mBackgroundCirclePaint);
+        return canvas;
     }
 
-    private void drawTransparentCircle(Canvas temp) {
-        temp.drawCircle(getWidth()/2, getHeight()/2,
-                (getWidth()/2) - Utils.dpToPx(thicknessDp, getResources()),
-                transparentPaint);
+    private void drawInnerCircle(Canvas canvas) {
+        canvas.drawCircle(width/2, height/2, width/2 - mainCircleThickness, transparentPaint);
     }
 
-    private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint arcPaint) {
+    private void drawOuterCircle(Canvas canvas) {
+        canvas.drawCircle(width/2, height/2, width/2, mOuterCirclePaint);
+    }
 
-        if (sweepDegrees <= 0) {
+    private void drawMainArc(Canvas canvas, float arcWidth, Paint arcPaint) {
+        if (arcWidth <= 0) {
             return;
         }
 
         arcPath.reset();
 
-        int width = getWidth();
-        int height = getHeight();
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
 
-        int halfWidth = width/2;
-        int halfHeight = height/2;
+        int radius = halfWidth - mainCircleThickness / 2;
 
-        int radius = halfWidth - thicknessPx / 2;
+        arcPath.arcTo(new RectF(0, 0, width, height), startOffset, arcWidth);
+        arcPath.arcTo(new RectF(mainCircleThickness,
+                                mainCircleThickness,
+                                width - mainCircleThickness,
+                                height - mainCircleThickness),
+                                startOffset + arcWidth, -arcWidth);
 
-        arcPath.arcTo(new RectF(0, 0, width, height), startAngle, sweepDegrees);
-        arcPath.arcTo(new RectF(thicknessPx, thicknessPx, width - thicknessPx, height - thicknessPx),
-                startAngle + sweepDegrees, -sweepDegrees);
+        Point startPoint = calculatePointOnArc(halfWidth, halfHeight, radius, startOffset);
+        arcPath.addCircle(startPoint.x, startPoint.y, mainCircleThickness / 2, Path.Direction.CW);
 
-        Point startPoint = calculatePointOnArc(halfWidth, halfHeight, radius, startAngle);
-        arcPath.addCircle(startPoint.x, startPoint.y, thicknessPx / 2, Path.Direction.CW);
-
-        Point endPoint = calculatePointOnArc(halfWidth, halfHeight, radius, startAngle + sweepDegrees);
-        arcPath.addCircle(endPoint.x, endPoint.y, thicknessPx / 2, Path.Direction.CW);
+        Point endPoint = calculatePointOnArc(halfWidth, halfHeight, radius, startOffset + arcWidth);
+        arcPath.addCircle(endPoint.x, endPoint.y, mainCircleThickness / 2, Path.Direction.CW);
 
         arcPath.close();
         canvas.drawPath(arcPath, arcPaint);
     }
 
     // this is to calculate the end points of the arc
-    private Point calculatePointOnArc(int centerX, int centerY, int circleRadius, float endAngle)
-    {
+    private Point calculatePointOnArc(int centerX, int centerY, int circleRadius, float endAngle) {
         double endAngleRadian = endAngle * (Math.PI / 180);
 
         int x = (int) Math.round((centerX + circleRadius * Math.cos(endAngleRadian)));
@@ -178,8 +240,57 @@ public class ProgressBarCircularIndeterminateRounded extends CustomView {
     public void setBackgroundColor(int color) {
         super.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         if (isEnabled()) {
-            beforeBackground = backgroundColor;
+            beforeBackground = mBackgroundCircleColor;
         }
-        this.backgroundColor = color;
+        this.mBackgroundCircleColor = color;
+    }
+
+    public class BackgroundCircleAnimation extends Animation {
+
+        public BackgroundCircleAnimation(int duration) {
+            setInterpolator(new LinearInterpolator());
+            setRepeatCount(0);
+            setFillAfter(true);
+            setDuration(duration);
+        }
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            super.applyTransformation(interpolatedTime, t);
+            mBackgroundCircleWidth = (int) (interpolatedTime * maxBackgroundCircleWidth) + minBackgroundCircleWidth;
+            ProgressBarCircularIndeterminateRounded.this.invalidate();
+        }
+    }
+
+    public class ForegroundCircleAnimation extends Animation {
+
+        public ForegroundCircleAnimation(int duration) {
+            setInterpolator(new AccelerateDecelerateInterpolator());
+            setFillAfter(true);
+            setRepeatCount(0);
+            setDuration(duration);
+        }
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            super.applyTransformation(interpolatedTime, t);
+            mForegroundCircleWidth = (int) (interpolatedTime * maxForegroundCircleWidth) + minForegroundCircleWidth;
+            ProgressBarCircularIndeterminateRounded.this.invalidate();
+        }
+    }
+
+    public class MyRotateAnimation extends RotateAnimation {
+
+        public MyRotateAnimation(float fromDegrees, float toDegrees, int duration) {
+            super(fromDegrees, toDegrees,
+                    ProgressBarCircularIndeterminateRounded.this.getWidth() / 2,
+                    ProgressBarCircularIndeterminateRounded.this.getHeight() / 2);
+
+            setDuration(duration);
+            setFillAfter(true);
+            setRepeatMode(Animation.RESTART);
+            setRepeatCount(Animation.INFINITE);
+            setInterpolator(new LinearInterpolator());
+        }
     }
 }
